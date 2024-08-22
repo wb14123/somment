@@ -4,6 +4,9 @@ import me.binwang.somment.model.Comment
 import org.scalajs.dom.Node
 import scalatags.JsDom.all.*
 
+import java.time.{LocalTime, ZoneId}
+import scala.scalajs.js.Date
+
 object CommentRender {
 
   private val indentColors = Seq(
@@ -44,8 +47,14 @@ object CommentRender {
         cls := "comment-self",
         indentColor.map(c => borderLeftColor := c),
         div(
-          cls := "comment-author",
-          comment.author,
+          cls := "comment-author-line",
+          div(cls := "comment-author", comment.author),
+          comment.upvotes.map { upvotes =>
+            val score = upvotes - comment.downvotes.getOrElse(0L)
+            div(cls := "comment-points", s"$score points")
+          },
+          comment.createdAt.map(t => div(cls := "comment-time",
+            new Date(t.toEpochMilli).toLocaleString()))
         ),
         div(
           cls := "comment-content",
