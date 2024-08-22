@@ -45,22 +45,22 @@ class RedditFetcher extends CommentFetcher {
   private def parseRedditComments(redditComments: ujson.Obj): Seq[Comment] = {
     redditComments("data")("children").arr.toSeq.map(_("data")).map { v =>
       val redditComment = v.obj
-      val createdAt = redditComment.get("created_utc").numOpt.map(t => Instant.ofEpochSecond(t.toLong))
-      val text = redditComment("body").str
-      val replies = redditComment.get("replies").objOpt
+      val createdAt = redditComment.get("created_utc").flatMap(_.numOpt).map(t => Instant.ofEpochSecond(t.toLong))
+      val text = redditComment.get("body").flatMap(_.strOpt).getOrElse("")
+      val replies = redditComment.get("replies").flatMap(_.objOpt)
       val children = if (replies.isDefined && replies.get.nonEmpty) {
         parseRedditComments(replies.get)
       } else Seq()
       Comment(
         id = redditComment("id").str,
-        author = redditComment("author").str,
+        author = redditComment.get("author").flatMap(_.strOpt).getOrElse("[Unknown user]"),
         createdAt = createdAt,
         updatedAt = createdAt,
-        upvotes = redditComment.get("ups").numOpt.map(_.toLong),
-        downvotes = redditComment.get("downs").numOpt.map(_.toLong),
+        upvotes = redditComment.get("ups").flatMap(_.numOpt).map(_.toLong),
+        downvotes = redditComment.get("downs").flatMap(_.numOpt).map(_.toLong),
         text = text,
-        html = redditComment.get("body_html").strOpt.getOrElse(text),
-        replyToID = redditComment.get("parent_id").strOpt.flatMap(s => if (s.isEmpty) None else Some(s)),
+        html = redditComment.get("body_html").flatMap(_.strOpt).getOrElse(text),
+        replyToID = redditComment.get("parent_id").flatMap(_.strOpt).flatMap(s => if (s.isEmpty) None else Some(s)),
         children = children,
         childrenCount = children.size,
       )
