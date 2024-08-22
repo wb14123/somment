@@ -17,6 +17,8 @@ scalaJSLinkerConfig ~= { _
   .withModuleSplitStyle(ModuleSplitStyle.FewestModules)
 }
 
+scalacOptions ++= Seq("-Xmax-inlines", "100")
+
 lazy val copyToDemo = taskKey[Unit]("Build source and run demo")
 
 copyToDemo := {
@@ -36,7 +38,22 @@ copyToDemo := {
   )
 }
 
+val sttpVersion = "4.0.0-M17"
+
 libraryDependencies ++= Seq(
   "org.scala-js" %%% "scalajs-dom" % "2.8.0",
   "com.lihaoyi" %%% "scalatags" % "0.13.1",
+
+  "org.typelevel" %%% "cats-effect" % "3.5.4",
+
+  "com.lihaoyi" %%% "upickle" % "4.0.0",
+  "com.softwaremill.sttp.client4" %%% "upickle" % sttpVersion,
+  "com.softwaremill.sttp.client4" %%% "cats" % sttpVersion,
+
 )
+
+dependencyOverrides ++= Seq(
+  "com.lihaoyi" %%% "upickle" % "4.0.0",
+)
+
+
