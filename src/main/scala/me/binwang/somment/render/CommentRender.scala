@@ -1,10 +1,10 @@
 package me.binwang.somment.render
 
 import me.binwang.somment.model.Comment
-import org.scalajs.dom.Node
+import org.scalajs.dom
+import org.scalajs.dom.{HTMLElement, Node}
 import scalatags.JsDom.all.*
 
-import java.time.{LocalTime, ZoneId}
 import scala.scalajs.js.Date
 
 object CommentRender {
@@ -24,15 +24,14 @@ object CommentRender {
     renderComments(comments, 0).render
   }
 
-  private def renderComments(comments: Seq[Comment], depth: Int): Frag = {
+  private def renderComments(comments: Seq[Comment], depth: Int, parentID: Option[String] = None): Frag = {
     if (comments.isEmpty) {
       ""
     } else {
-      val doms = comments.map { comment =>
-        renderComment(comment, depth)
-      }
+      val doms = comments.map(renderComment(_, depth))
+      val childCls = parentID.map(showChildrenClass).getOrElse("")
       div(
-        cls := "comments",
+        cls := s"comments $childCls",
         doms
       )
     }
@@ -41,6 +40,7 @@ object CommentRender {
   private def renderComment(comment: Comment, depth: Int): Frag = {
     val childrenClass = if (depth > 0) "comment-child" else ""
     val indentColor = if (depth > 0) Some(indentColors((depth-1) % indentColors.size)) else None
+    val nullHref = href := "javascript:void(0);"
     div(
       cls := s"comment $childrenClass",
       div(
@@ -54,16 +54,53 @@ object CommentRender {
             div(cls := "comment-points", s"$score points")
           },
           comment.createdAt.map(t => div(cls := "comment-time",
-            new Date(t.toEpochMilli).toLocaleString()))
+            new Date(t.toEpochMilli).toLocaleString())),
+
+          if (comment.childrenCount > 0) { Seq(
+            a(cls := s"comment-op ${hideChildrenClass(comment.id)}",
+              nullHref, display := "none",
+              onclick := { () => openChildren(comment.id) },
+              s"[${comment.childrenCount} more]")
+          )} else {
+            ""
+          }
         ),
+        div(cls := s"comment-content ${showChildrenClass(comment.id)}", comment.text),
         div(
-          cls := "comment-content",
-          comment.text,
-        ),
+          cls := s"comment-ops ${showChildrenClass(comment.id)}",
+          comment.link.map(l => a(cls := "comment-op", href := l.toString, target := "_blank", "open")),
+          a(cls := "comment-op", nullHref, onclick := { () => closeChildren(comment.id) }, "hide"),
+        )
       ),
       hr(cls := "comment-separator"),
-      renderComments(comment.children, depth + 1),
+      renderComments(comment.children, depth + 1, Some(comment.id)),
     )
+  }
+
+  private def showChildrenClass(id: String) = {
+    s"comment-show-children-$id"
+  }
+
+  private def hideChildrenClass(id: String) = {
+    s"comment-hide-children-$id"
+  }
+
+  private def closeChildren(id: String): Unit = {
+    dom.document.querySelectorAll(s".${showChildrenClass(id)}").toSeq.foreach {
+      _.asInstanceOf[HTMLElement].style.display = "none"
+    }
+    dom.document.querySelectorAll(s".${hideChildrenClass(id)}").toSeq.foreach {
+      _.asInstanceOf[HTMLElement].style.display = "flex"
+    }
+  }
+
+  private def openChildren(id: String): Unit = {
+    dom.document.querySelectorAll(s".${showChildrenClass(id)}").toSeq.foreach {
+      _.asInstanceOf[HTMLElement].style.display = "flex"
+    }
+    dom.document.querySelectorAll(s".${hideChildrenClass(id)}").toSeq.foreach {
+      _.asInstanceOf[HTMLElement].style.display = "none"
+    }
   }
 
 

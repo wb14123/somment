@@ -60,6 +60,7 @@ class RedditFetcher extends CommentFetcher {
         downvotes = redditComment.get("downs").flatMap(_.numOpt).map(_.toLong),
         text = text,
         html = redditComment.get("body_html").flatMap(_.strOpt).getOrElse(text),
+        link = redditComment.get("permalink").flatMap(_.strOpt).map(l => new URI(s"https://old.reddit.com$l")),
         replyToID = redditComment.get("parent_id").flatMap(_.strOpt).flatMap(s => if (s.isEmpty) None else Some(s)),
         children = children,
         childrenCount = children.size,

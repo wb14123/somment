@@ -1,5 +1,6 @@
 package me.binwang.somment.model
 
+import java.net.URI
 import java.time.Instant
 
 case class Comment(
@@ -11,6 +12,7 @@ case class Comment(
   downvotes: Option[Long],
   text: String,
   html: String,
+  link: Option[URI],
   replyToID: Option[String],
   children: Seq[Comment],
   childrenCount: Long,
