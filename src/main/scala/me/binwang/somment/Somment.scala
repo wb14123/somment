@@ -7,14 +7,15 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExportTopLevel
 import cats.effect.unsafe.implicits.global
 import me.binwang.somment.render.CommentRender
+import org.scalajs.dom.Element
 
 @JSExportTopLevel("Somment", moduleID = "somment")
-class Somment(url: String, id: String) extends js.Object {
+class Somment(url: String, elem: Element) extends js.Object {
 
   def create(): Unit = {
     val fetcher = new RedditFetcher()
     fetcher.getComments(url).map { comments =>
-      dom.document.getElementById(id).replaceWith(CommentRender(comments))
+      elem.replaceWith(CommentRender(comments))
     }.unsafeRunAndForget()
   }
 
