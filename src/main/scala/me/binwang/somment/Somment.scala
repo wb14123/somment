@@ -14,9 +14,11 @@ class Somment(url: String, elem: Element) extends js.Object {
 
   def create(): Unit = {
     val fetcher = new RedditFetcher()
-    fetcher.getComments(url).map { comments =>
-      elem.replaceWith(CommentRender(comments))
-    }.unsafeRunAndForget()
+    if (fetcher.canHandle(url)) {
+      fetcher.getComments(url).map { comments =>
+        elem.replaceWith(CommentRender(comments))
+      }.unsafeRunAndForget()
+    }
   }
 
 }
