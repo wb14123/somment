@@ -11,17 +11,20 @@ class SommentElement extends HTMLElement {
     }
 
     connectedCallback() {
+        /*
         const shadow = this.attachShadow({ mode: "open" });
 
         const style = document.createElement("link");
         style.setAttribute("rel", "stylesheet");
         style.setAttribute("href", "somment.css");
+        shadow.appendChild(style);
+        */
 
         const elem = document.createElement("div");
         elem.setAttribute("id", "somment-root")
 
-        shadow.appendChild(elem);
-        shadow.appendChild(style);
+        // shadow.appendChild(elem);
+        this.appendChild(elem);
 
         const somment = new Somment(this.getAttribute("link"), elem);
         somment.create();
