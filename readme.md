@@ -8,3 +8,9 @@ cd demo
 npm install
 npm run dev // run the demo
 ```
+
+Compile optimized JS:
+
+```
+sbt fullLinkJS
+```
