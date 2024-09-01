@@ -78,7 +78,7 @@ class HackerNewsFetcher extends CommentFetcher {
 
     val lastComments = mutable.Map[Int, String]()
 
-    val comments = parsedHTML.querySelectorAll(".comtr").toSeq.map { elem =>
+    val comments = parsedHTML.querySelectorAll(".comtr:not(.noshow):not(.coll)").toSeq.map { elem =>
       val indent = elem.querySelector("td[indent]").getAttribute("indent").toInt
       val parent = if (indent > 0) {
         lastComments.get(indent - 1)
