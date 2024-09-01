@@ -1,6 +1,6 @@
 package me.binwang.somment
 
-import me.binwang.somment.fetcher.RedditFetcher
+import me.binwang.somment.fetcher.{HackerNewsFetcher, RedditFetcher}
 import org.scalajs.dom
 
 import scala.scalajs.js
@@ -11,13 +11,17 @@ import org.scalajs.dom.Element
 
 @JSExportTopLevel("Somment", moduleID = "somment")
 class Somment(url: String, elem: Element) extends js.Object {
-
+  
+  private val fetchers = Seq(
+    new RedditFetcher(),
+    new HackerNewsFetcher(),
+  )
+  
   def create(): Unit = {
-    val fetcher = new RedditFetcher()
-    if (fetcher.canHandle(url)) {
+    fetchers.find(_.canHandle(url)).foreach { fetcher =>
       fetcher.getComments(url).map { comments =>
         elem.replaceWith(CommentRender(comments))
-      }.unsafeRunAndForget()
+      }.unsafeRunAndForget()     
     }
   }
 

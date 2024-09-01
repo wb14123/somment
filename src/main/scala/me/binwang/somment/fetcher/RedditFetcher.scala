@@ -2,7 +2,6 @@ package me.binwang.somment.fetcher
 
 import cats.effect.IO
 import me.binwang.somment.model.Comment
-import sttp.client4.impl.cats.FetchCatsBackend
 import sttp.client4.*
 import sttp.client4.upicklejson.default.asJson
 
@@ -11,8 +10,6 @@ import java.time.Instant
 
 
 class RedditFetcher extends CommentFetcher {
-
-  private val sttpBackend = FetchCatsBackend[IO]()
 
   override def canHandle(url: String): Boolean = {
     val uri = new URI(url)

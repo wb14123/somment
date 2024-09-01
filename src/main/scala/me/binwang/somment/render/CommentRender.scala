@@ -56,14 +56,10 @@ object CommentRender {
           comment.createdAt.map(t => div(cls := "comment-time",
             new Date(t.toEpochMilli).toLocaleString())),
 
-          if (comment.childrenCount > 0) { Seq(
-            a(cls := s"comment-op ${hideChildrenClass(comment.id)}",
-              nullHref, display := "none",
-              onclick := { () => openChildren(comment.id) },
-              s"[${comment.childrenCount} more]")
-          )} else {
-            ""
-          }
+          a(cls := s"comment-op ${hideChildrenClass(comment.id)}",
+            nullHref, display := "none",
+            onclick := { () => openChildren(comment.id) },
+            s"[${comment.childrenCount} more]")
         ),
         div(cls := s"comment-content ${showChildrenClass(comment.id)}", comment.text),
         div(
