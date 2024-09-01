@@ -39,10 +39,11 @@ object CommentRender {
 
   private def renderComment(comment: Comment, depth: Int): Frag = {
     val childrenClass = if (depth > 0) "comment-child" else ""
+    val indentClass = if (depth > 1) "comment-indent" else ""
     val indentColor = if (depth > 0) Some(indentColors((depth-1) % indentColors.size)) else None
     val nullHref = href := "javascript:void(0);"
     div(
-      cls := s"comment $childrenClass",
+      cls := s"comment $childrenClass $indentClass",
       div(
         cls := "comment-self",
         indentColor.map(c => borderLeftColor := c),
