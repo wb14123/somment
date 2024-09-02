@@ -1,5 +1,6 @@
 package me.binwang.somment.render
 
+import me.binwang.somment.lib.DOMPurify
 import me.binwang.somment.model.Comment
 import org.scalajs.dom
 import org.scalajs.dom.{HTMLElement, Node}
@@ -62,7 +63,8 @@ object CommentRender {
             onclick := { () => openChildren(comment.id) },
             s"[${comment.childrenCount} more]")
         ),
-        div(cls := s"comment-content ${showChildrenClass(comment.id)}", comment.text),
+        div(cls := s"comment-content ${showChildrenClass(comment.id)}",
+          raw(DOMPurify.sanitize(comment.html))),
         div(
           cls := s"comment-ops ${showChildrenClass(comment.id)}",
           comment.link.map(l => a(cls := "comment-op", href := l.toString, target := "_blank", "open")),
