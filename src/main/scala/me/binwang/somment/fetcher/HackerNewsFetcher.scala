@@ -5,7 +5,8 @@ import me.binwang.somment.model.Errors.FetchingException
 import org.scalajs.dom.{DOMParser, Document, Element, MIMEType, console}
 import sttp.client4.*
 
-import java.net.URI
+import java.net.{URI, URLEncoder}
+import java.nio.charset.StandardCharsets
 import java.time.{LocalDateTime, ZoneOffset}
 import scala.collection.mutable
 import scala.util.Try
@@ -21,7 +22,7 @@ class HackerNewsFetcher extends CommentFetcher {
 
   override def getComments(url: String): IO[Seq[Comment]] = {
     basicRequest
-      .get(uri"https://http-proxy.rssbrain.com/?link=$url")
+      .get(uri"https://http-proxy.rssbrain.com/?link=${URLEncoder.encode(url, StandardCharsets.UTF_8)}")
       .response(asString)
       .send(sttpBackend)
       .flatMap {
