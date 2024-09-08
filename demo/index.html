@@ -9,7 +9,30 @@
     <script type="module" src="/somment_component.js"></script>
   </head>
   <body>
-    <!--<somment-comment link="https://news.ycombinator.com/item?id=41412256"></somment-comment>-->
-    <somment-comment link="https://old.reddit.com/r/linux_gaming/comments/1f6farc/linux_market_share_keeps_rising_freebsd_goes_to_0/"></somment-comment>
+
+    <script>
+      function getComment() {
+        const link = document.querySelector("#link-input").value;
+        document.querySelector("somment-comment").setAttribute("link", link);
+      }
+    </script>
+
+    <style>
+      #input-form {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        gap: 10px;
+        max-width: 600px;
+      }
+    </style>
+
+    <div id="input-form">
+      <label>Input HackerNews or Reddit URL to get comments:</label>
+      <input id="link-input" type="text"/>
+      <button onclick="getComment()">Get Comments</button>
+    </div>
+    <somment-comment></somment-comment>
+
   </body>
 </html>

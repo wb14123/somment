@@ -10,15 +10,11 @@ class SommentElement extends HTMLElement {
         super();
     }
 
-    connectedCallback() {
-        this.#createSommentElement();
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         if (name !== "link") {
             return;
         }
-        if (oldValue === newValue || oldValue == null) {
+        if (oldValue === newValue) {
             return;
         }
         const sommentElem = this.querySelector('.comments');
