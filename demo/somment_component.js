@@ -11,19 +11,26 @@ class SommentElement extends HTMLElement {
     }
 
     connectedCallback() {
-        /*
-        const shadow = this.attachShadow({ mode: "open" });
+        this.#createSommentElement();
+    }
 
-        const style = document.createElement("link");
-        style.setAttribute("rel", "stylesheet");
-        style.setAttribute("href", "somment.css");
-        shadow.appendChild(style);
-        */
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name !== "link") {
+            return;
+        }
+        if (oldValue === newValue || oldValue == null) {
+            return;
+        }
+        const sommentElem = this.querySelector('.comments');
+        if (sommentElem != null) {
+            sommentElem.remove();
+        }
+        this.#createSommentElement();
+    }
 
+    #createSommentElement() {
         const elem = document.createElement("div");
         elem.setAttribute("id", "somment-root")
-
-        // shadow.appendChild(elem);
         this.appendChild(elem);
 
         const somment = new Somment(this.getAttribute("link"), elem);
