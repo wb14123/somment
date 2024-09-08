@@ -1,6 +1,6 @@
 
 
-Somment is a Javascript library to show comments from different websites. You only need to provide a link to the page. Current it supports:
+Somment is a Javascript library to show comments from different websites. You only need to provide a link to the page. Currently it supports:
 
 * HackerNews
 * Reddit
