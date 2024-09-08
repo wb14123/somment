@@ -27,13 +27,7 @@ copyToDemo := {
 
   Files.copy(
     Path.of("./target/scala-3.5.0/somment-fastopt/somment.js"),
-    Path.of("./demo/build/somment.js"),
-    StandardCopyOption.REPLACE_EXISTING,
-  )
-
-  Files.copy(
-    Path.of("./target/scala-3.5.0/somment-fastopt/somment.js.map"),
-    Path.of("./demo/build/somment.js.map"),
+    Path.of("./demo/somment.js"),
     StandardCopyOption.REPLACE_EXISTING,
   )
 }

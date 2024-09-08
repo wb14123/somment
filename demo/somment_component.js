@@ -1,5 +1,5 @@
 
-import { Somment } from "./build/somment.js";
+import { Somment } from "./somment.js";
 
 
 class SommentElement extends HTMLElement {
