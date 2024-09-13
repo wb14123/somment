@@ -1,8 +1,14 @@
 {
-  "name": "demo",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "somment",
+  "version": "0.0.1",
+  "main": "somment_component.js",
+  "style": "somment.css",
+  "license": "GPL-3.0",
+  "files": [
+    "somment.js",
+    "somment_component.js",
+    "somment.css"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

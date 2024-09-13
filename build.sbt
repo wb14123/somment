@@ -1,6 +1,7 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
 
 import java.nio.file.{Files, Path, StandardCopyOption}
+import scala.sys.process._
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
@@ -20,16 +21,38 @@ scalaJSLinkerConfig ~= { _
 scalacOptions ++= Seq("-Xmax-inlines", "100")
 
 lazy val copyToDemo = taskKey[Unit]("Build source and run demo")
-
 copyToDemo := {
-
-  new File("./demo/build").mkdirs()
-
   Files.copy(
     Path.of("./target/scala-3.5.0/somment-fastopt/somment.js"),
     Path.of("./demo/somment.js"),
     StandardCopyOption.REPLACE_EXISTING,
   )
+
+  Files.copy(
+    Path.of("./target/scala-3.5.0/somment-fastopt/somment.js.map"),
+    Path.of("./demo/somment.js.map"),
+    StandardCopyOption.REPLACE_EXISTING,
+  )
+}
+
+lazy val npmRelease = taskKey[Unit]("Build and release to npm registry")
+npmRelease := {
+  (Compile / fullOptJS).value
+
+  Files.copy(
+    Path.of("./target/scala-3.5.0/somment-opt/somment.js"),
+    Path.of("./demo/somment.js"),
+    StandardCopyOption.REPLACE_EXISTING,
+  )
+
+  Files.copy(
+    Path.of("./target/scala-3.5.0/somment-opt/somment.js.map"),
+    Path.of("./demo/somment.js.map"),
+    StandardCopyOption.REPLACE_EXISTING,
+  )
+
+  val workDir = new File("./demo")
+  Process("npm" :: "publish" :: Nil, workDir) !
 }
 
 val sttpVersion = "4.0.0-M17"

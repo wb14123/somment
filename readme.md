@@ -28,21 +28,13 @@ sbt fullLinkJS
 
 ## Release Files
 
-Currently there is no packaging and release yet. After build steps above, you need to copy the following files to use:
-
 ```
-# the built Javascript file and source map
-target/scala-3.5.0/somment-opt/somment.js
-target/scala-3.5.0/somment-opt/somment.js.map
-
-# for web component
-demo/somment_component.js
-
-# for css
-demo/somment.css
+sbt npmRelease
 ```
 
-It also depends on [DOMPurify](https://github.com/cure53/DOMPurify). So you should also include [purify.min.js](https://raw.githubusercontent.com/cure53/DOMPurify/3.1.6/dist/purify.min.js).
+If the auto run of `npm publish` in the command above failed because of 2FA issues, a workaround is to go to demo directory and run `npm publish` manually.
+
+It also depends on [DOMPurify](https://github.com/cure53/DOMPurify). So you should also include [purify.min.js](https://raw.githubusercontent.com/cure53/DOMPurify/3.1.6/dist/purify.min.js). TODO: include this in npm dependencies.
 
 
 ## Usage
