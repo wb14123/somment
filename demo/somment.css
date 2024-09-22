@@ -16,6 +16,17 @@
   gap: 10px;
 }
 
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.comment-content * {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+}
+
 .comment-child .comment-self {
   border-left-width: 4px;
   border-left-style: solid;
