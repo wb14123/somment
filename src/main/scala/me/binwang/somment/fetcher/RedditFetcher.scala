@@ -24,9 +24,8 @@ class RedditFetcher extends CommentFetcher {
   }
 
   override def getComments(url: String): IO[Seq[Comment]] = {
-    val commentUrl = s"$url.json"
     basicRequest
-      .get(uri"$url.json")
+      .get(uri"$url.json?sort=confidence")
       .response(asJson[ujson.Arr])
       .send(sttpBackend)
       .flatMap { _.body match {
