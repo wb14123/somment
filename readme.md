@@ -28,6 +28,8 @@ sbt fullLinkJS
 
 ## Release Files
 
+Upgrade version number in `demo/packages.json`. Then run the command to release:
+
 ```
 sbt npmRelease
 ```
