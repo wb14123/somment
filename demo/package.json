@@ -1,6 +1,6 @@
 {
   "name": "somment",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "somment_component.js",
   "style": "somment.css",
   "license": "GPL-3.0",
